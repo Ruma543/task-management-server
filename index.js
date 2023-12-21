@@ -59,7 +59,7 @@ async function run() {
       });
       res.send({ token });
     });
-
+    // user related api
     app.post('/users', async (req, res) => {
       const userInfo = req.body;
       const query = { email: userInfo.email };
@@ -73,13 +73,13 @@ async function run() {
       const result = await userCollection.insertOne(userInfo);
       res.send(result);
     });
-
+    // task post related api
     app.post('/tasks', async (req, res) => {
       const taskData = req.body;
       const result = await taskCollection.insertOne(taskData);
       res.send(result);
     });
-
+    // task get related api
     app.get('/tasks/:email', async (req, res) => {
       const email = req.params.email;
       const result = await taskCollection.find({ email }).toArray();
