@@ -8,7 +8,11 @@ const port = process.env.port || 5000;
 
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://task-management-client-4195e.web.app',
+    ],
     credentials: true,
   })
 );
@@ -46,7 +50,7 @@ const verifyToken = (req, res, next) => {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // jwt related api
     app.post('/jwt', async (req, res) => {
       const user = req.body;
@@ -88,12 +92,33 @@ async function run() {
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
+    app.get('/tasks/edit/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await taskCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.put('/tasks/edit/:id', async (req, res) => {
+      const id = req.params.id;
+      const editData = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          deadlines: editData.deadlines,
+        },
+      };
+      const options = { upsert: true };
+      const result = await taskCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
-    await client.db('admin').command({ ping: 1 });
-    console.log(
-      'Pinged your deployment. You successfully connected to MongoDB!'
-    );
+    // await client.db('admin').command({ ping: 1 });
+    // console.log(
+    //   'Pinged your deployment. You successfully connected to MongoDB!'
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
