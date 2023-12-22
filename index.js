@@ -85,13 +85,14 @@ async function run() {
       const result = await taskCollection.find({ email }).toArray();
       res.send(result);
     });
-
+    // task delete related api
     app.delete('/tasks/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
+    // task get for  edit related api
     app.get('/tasks/edit/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id);
@@ -99,7 +100,7 @@ async function run() {
       const result = await taskCollection.findOne(query);
       res.send(result);
     });
-
+    // task update related api
     app.put('/tasks/edit/:id', async (req, res) => {
       const id = req.params.id;
       const editData = req.body;
