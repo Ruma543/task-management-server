@@ -6,16 +6,7 @@ const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.port || 5000;
 
-app.use(
-  cors({
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'https://task-management-client-4195e.web.app',
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.TASK_MANAGEMENT_DB}:${process.env.TASK_MANAGEMENT_PASS}@cluster0.hybcmzi.mongodb.net/?retryWrites=true&w=majority`;
